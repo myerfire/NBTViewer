@@ -17,6 +17,7 @@ import java.awt.datatransfer.StringSelection;
 
 public class NBTViewer implements ModInitializer {
     private final MinecraftClient client = MinecraftClient.getInstance();
+    private ItemStack lastItem;
     @Override
     public void onInitialize() {
         KeyBinding showNBT = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -33,10 +34,11 @@ public class NBTViewer implements ModInitializer {
         ));
         // held item
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (copyToClipboard.wasPressed()) {
+            while (copyToClipboard.wasPressed()) {
                 if (client.player != null) {
                     final ItemStack stack = client.player.getMainHandStack();
                     if (stack.getTag() == null) return;
+                    if (isLastItem(stack)) return;
                     client.player.sendMessage(new LiteralText("Copied NBT Data of minecraft:" + stack.toString().split(" ")[1] + " to clipboard"), false);
                     StringSelection selection = new StringSelection(this.format(stack.getTag().toString()));
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
@@ -46,7 +48,7 @@ public class NBTViewer implements ModInitializer {
         // in inventory (show)
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
             if ((!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), KeyBindingHelper.getBoundKeyOf(showNBT).getCode())) || (stack.getTag() == null)) return;
-            String nbt = this.format(stack.getTag().toString());
+            String nbt = format(stack.getTag().toString());
             lines.add(new LiteralText(""));
             for (String s : nbt.split("\n")) {
                 lines.add(new LiteralText(s));
@@ -55,9 +57,9 @@ public class NBTViewer implements ModInitializer {
         // in inventory (copy to clipboard)
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
             if ((!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), KeyBindingHelper.getBoundKeyOf(copyToClipboard).getCode())) || (stack.getTag() == null)) return;
-//            if (stack.getTag() == null) return;
+            if (isLastItem(stack)) return;
             if (client.player != null) client.player.sendMessage(new LiteralText("Copied NBT Data of minecraft:" + stack.toString().split(" ")[1] + " to clipboard"), false);
-            StringSelection selection = new StringSelection(this.format(stack.getTag().toString()));
+            StringSelection selection = new StringSelection(format(stack.getTag().toString()));
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
         });
     }
@@ -86,5 +88,12 @@ public class NBTViewer implements ModInitializer {
                 for (int i = 0; i < indent; i++) sb.append("  ");
             }
         } return sb.toString();
+    }
+    public boolean isLastItem(ItemStack item) {
+        if (item == lastItem) return true;
+        else {
+            lastItem = item;
+            return false;
+        }
     }
 }
