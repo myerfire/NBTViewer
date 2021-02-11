@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "nbtviewer",
+  "version": "${version}",
+  "name": "NBTViewer",
+  "description": "Displays NBT Data of currently held item",
+  "authors": [
+    "myerfire",
+    "ernieLlanfairski"
+  ],
+  "contact": {
+    "repo": "https://github.com/myerfire/NBTViewer"
+  },
+  "license": "MIT",
+  "icon": "assets/NBTViewer/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "wtf.myer.nbtviewer.client.NBTViewerClient"
+    ],
+    "main": [
+      "wtf.myer.nbtviewer.NBTViewer"
+    ]
+  },
+  "mixins": [
+    "NBTViewer.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
