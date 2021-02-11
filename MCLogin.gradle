@@ -22,7 +22,7 @@ import com.mojang.authlib.Agent
 import com.mojang.authlib.properties.PropertyMap
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 
-task setupRealMcAccount {
+task MCLogin {
     group = 'ide'
     doLast {
         def username = project.ext.credentials['minecraftUser']
