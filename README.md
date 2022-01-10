@@ -1,5 +1,7 @@
 # NBTViewer - Fabric 1.15.6 Mod to view NBT Data of items
 
+**This (probably) will continue working for the proper Fabric version but is unmaintained and therefore is archived.**
+
 [![widget](https://inv.wtf/widget/myerfire)](https://myer.wtf/discord)
 
 Maintained by [Myer (also known as myerfire, MyerFire)](https://github.com/myerfire)
